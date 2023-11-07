@@ -1,0 +1,4 @@
+{"role": "user", "content": "I am so angry, right now"}
+{"role": "assistant", "content": "negative"}
+{"role": "user", "content": "This is the best thing that has happened to me"}
+{"role": "assistant", "content": "positive"}
