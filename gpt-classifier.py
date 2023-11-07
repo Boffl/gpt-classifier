@@ -2,6 +2,9 @@ import json
 import os
 import tiktoken
 from openai import OpenAI
+import jsonlines
+from tqdm import tqdm
+from argparse import ArgumentParser
 
 api_key = os.getenv('OPENAI_KEY')
 org_id = os.getenv('ORG_ID')
@@ -61,4 +64,30 @@ def classify(text:str, classes:list[str], examples=[], model='gpt-3.5-turbo'):
     return completion.choices[0].message.content
 
 if __name__ == "__main__":
-    print(classify('I love you', ['positive', 'negative']))
+    parser = ArgumentParser()
+    parser.add_argument('filepath_tweets')
+    parser.add_argument('filepath_classes')
+    parser.add_argument('outfilepath')
+    parser.add_argument('--few_shot', default='')
+    parser.add_argument('--number_of_tweets', help="total number of tweets to classify, for the progress bar")
+    args = parser.parse_args()
+
+    total_number = int(args.number_of_tweets)
+
+    examples = []
+    if args.few_shot:
+        with jsonlines.open(args.few_shot) as reader:
+            for line in reader:
+                examples.append(line)
+
+    classes = []
+    with open(args.filepath_classes, 'r', encoding='utf-8') as reader:
+        for line in reader:
+            classes.append(line.strip())
+
+
+    with open(args.filepath_tweets, 'r', encoding='utf-8') as reader:
+        with open(args.outfilepath, 'w', encoding='utf-8') as writer:
+            for line in tqdm(reader, total=total_number):
+                prediction = classify(line, classes, examples=examples)
+                writer.write(f'{prediction}\n')
