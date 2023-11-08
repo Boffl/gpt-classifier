@@ -1,4 +1,3 @@
-import json
 import os
 import tiktoken
 from openai import OpenAI
@@ -6,15 +5,7 @@ import jsonlines
 from tqdm import tqdm
 from argparse import ArgumentParser
 
-api_key = os.getenv('OPENAI_KEY')
-org_id = os.getenv('ORG_ID')
 
-# set api-key for authentication, privat or organizational
-if org_id:
-    print('this')
-    client = OpenAI(api_key=api_key, organization= org_id)
-else:
-    client = OpenAI(api_key=api_key)
 
 
 def make_logit_bias(inputs:list[str], model='gpt-3.5-turbo'):
@@ -36,6 +27,13 @@ def make_logit_bias(inputs:list[str], model='gpt-3.5-turbo'):
 
 
 def classify(text:str, classes:list[str], examples=[], model='gpt-3.5-turbo'):
+    '''Classify a text with GPT
+    inputs: 1) text to classify
+            2) classes
+            3) examples: list of chat history, with expected behaviour of classification
+                        [{"role": "user", "content": "blabla"},{"role": "assistant", "content": "some class"}]
+
+    returns: the string returned by GPT. Note: it is not 100% guaranteed that it will be one of the classes'''
 
     logit_bias, max_tokens = make_logit_bias(classes)
 
@@ -52,6 +50,16 @@ def classify(text:str, classes:list[str], examples=[], model='gpt-3.5-turbo'):
     # add the tweet that is to be classified
     messages.append({"role": "user", "content": text})
 
+    # call the openai API
+    api_key = os.getenv('OPENAI_KEY')
+    org_id = os.getenv('ORG_ID')
+
+    # set api-key for authentication, privat or organizational
+    if org_id:
+        client = OpenAI(api_key=api_key, organization=org_id)
+    else:
+        client = OpenAI(api_key=api_key)
+
     completion = client.chat.completions.create(
       model=model,
       messages=messages,
@@ -65,17 +73,20 @@ def classify(text:str, classes:list[str], examples=[], model='gpt-3.5-turbo'):
 
 if __name__ == "__main__":
     parser = ArgumentParser()
-    parser.add_argument('filepath_tweets')
-    parser.add_argument('filepath_classes')
+    parser.add_argument('filepath_tweets', help="txt file with each tweet on one line")
+    parser.add_argument('filepath_classes', help="txt file with each class on one line")
     parser.add_argument('outfilepath')
-    parser.add_argument('--few_shot', default='')
-    parser.add_argument('--number_of_tweets', help="total number of tweets to classify, for the progress bar")
+    parser.add_argument('--few_shot', default='', help='jsonl file with examples: '
+                                                       '{"role": "user", "content": "blabla"}\\n'
+                                                       '{"role": "assistant", "content": "some class"}')
+    parser.add_argument('--number_of_tweets', help="for the progress bar")
     args = parser.parse_args()
 
-    total_number = int(args.number_of_tweets)
+
+    total_number = int(args.number_of_tweets) if args.number_of_tweets else None
 
     examples = []
-    if args.few_shot:
+    if args.few_shot:  # add few-shot examples, if provided
         with jsonlines.open(args.few_shot) as reader:
             for line in reader:
                 examples.append(line)
@@ -84,7 +95,6 @@ if __name__ == "__main__":
     with open(args.filepath_classes, 'r', encoding='utf-8') as reader:
         for line in reader:
             classes.append(line.strip())
-
 
     with open(args.filepath_tweets, 'r', encoding='utf-8') as reader:
         with open(args.outfilepath, 'w', encoding='utf-8') as writer:
