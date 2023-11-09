@@ -1,0 +1,4 @@
+anger
+joy
+optimism
+sadness

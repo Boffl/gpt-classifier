@@ -6,7 +6,9 @@ from tqdm import tqdm
 from argparse import ArgumentParser
 
 
+
 def make_logit_bias(inputs:list[str], model='gpt-3.5-turbo'):
+
     """
     returns:  1) a dictionary setting all the ids of the corresponding BPE tokens to 100
               2) The highest number of BPE tokens among the inputs (to set max_len when generating)
@@ -24,6 +26,7 @@ def make_logit_bias(inputs:list[str], model='gpt-3.5-turbo'):
 
 
 def classify(text:str, classes:list[str], examples=[], model='gpt-3.5-turbo'):
+
     '''Classify a text with GPT
     inputs: 1) text to classify
             2) classes
