@@ -97,7 +97,5 @@ if __name__ == "__main__":
     with open(args.filepath_tweets, 'r', encoding='utf-8') as reader:
         with open(args.outfilepath, 'w', encoding='utf-8') as writer:
             for line in tqdm(reader, total=total_number):
-
-                print(line)
-                #prediction = classify(line, classes, examples=examples)
-                #writer.write(f'{prediction}\n')
+                prediction = classify(line, classes, examples=examples)
+                writer.write(f'{prediction}\n')
