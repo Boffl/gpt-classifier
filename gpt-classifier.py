@@ -6,8 +6,6 @@ from tqdm import tqdm
 from argparse import ArgumentParser
 
 
-
-
 def make_logit_bias(inputs:list[str], model='gpt-3.5-turbo'):
     """
     returns:  1) a dictionary setting all the ids of the corresponding BPE tokens to 100
@@ -23,7 +21,6 @@ def make_logit_bias(inputs:list[str], model='gpt-3.5-turbo'):
             logit_bias[tokenid] = 100
 
     return logit_bias, max_toks
-
 
 
 def classify(text:str, classes:list[str], examples=[], model='gpt-3.5-turbo'):
@@ -69,7 +66,8 @@ def classify(text:str, classes:list[str], examples=[], model='gpt-3.5-turbo'):
 
     )
 
-    return completion.choices[0].message.content
+    return completion.choices[0].message.content, completion.usage.prompt_tokens, completion.usage.completion_tokens
+
 
 if __name__ == "__main__":
     parser = ArgumentParser()
@@ -79,9 +77,9 @@ if __name__ == "__main__":
     parser.add_argument('--few_shot', default='', help='jsonl file with examples: '
                                                        '{"role": "user", "content": "blabla"}\\n'
                                                        '{"role": "assistant", "content": "some class"}')
+    parser.add_argument('--count_tokens', default='', help='csv file to estimate the cost of the run')
     parser.add_argument('--number_of_tweets', help="for the progress bar")
     args = parser.parse_args()
-
 
     total_number = int(args.number_of_tweets) if args.number_of_tweets else None
 
@@ -99,5 +97,8 @@ if __name__ == "__main__":
     with open(args.filepath_tweets, 'r', encoding='utf-8') as reader:
         with open(args.outfilepath, 'w', encoding='utf-8') as writer:
             for line in tqdm(reader, total=total_number):
-                prediction = classify(line, classes, examples=examples)
+                prediction, prompt_tokens, completion_tokens = classify(line, classes, examples=examples)
+                if args.count_tokens:
+                    with open(args.count_tokens, "a", encoding='utf-8') as csvfile:
+                        csvfile.write(f'{prompt_tokens},{completion_tokens}\n')
                 writer.write(f'{prediction}\n')
