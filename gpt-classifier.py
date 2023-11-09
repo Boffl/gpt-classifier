@@ -6,6 +6,7 @@ from openai import OpenAI
 import jsonlines
 from tqdm import tqdm
 from argparse import ArgumentParser
+from generate import OpenAiModels
 
 
 
@@ -56,27 +57,36 @@ def classify(text:str, classes:list[str], examples=[], model='gpt-3.5-turbo'):
     api_key = os.getenv('OPENAI_KEY')
     org_id = os.getenv('ORG_ID')
 
-    # set api-key for authentication, privat or organizational
-    if org_id:
-        client = OpenAI(api_key=api_key, organization=org_id)
-    else:
-        client = OpenAI(api_key=api_key)
+    # try with custom function to call the model
+    model = OpenAiModels(model, api_key, org_id)
+    # return content, prompt_tokens, completion_tokens
+    return model.generate(messages, logit_bias, max_tokens)
 
-    for i in range(10):
-        try:
-            completion = client.chat.completions.create(
-              model=model,
-              messages=messages,
-                logit_bias=logit_bias,
-                max_tokens=max_tokens,
-                top_p=0.1
-
-            )
-            return completion.choices[0].message.content, completion.usage.prompt_tokens, completion.usage.completion_tokens
-        except openai.APIError: # serverside errors
-            time.sleep(1.2 ** i)  # exponential increase time between failed requests, last request waits for approx. 5 seconds
-            print(f'\nserverside error, try again in {1.2**i} seconds')
-    print('Servers unavailable')
+    # # set api-key for authentication, privat or organizational
+    # if org_id:
+    #     client = OpenAI(api_key=api_key, organization=org_id)
+    # else:
+    #     client = OpenAI(api_key=api_key)
+    #
+    # for i in range(10):
+    #     try:
+    #         print('\nstart request')
+    #         time_0 = time.perf_counter()
+    #         completion = client.chat.completions.create(
+    #           model=model,
+    #           messages=messages,
+    #             logit_bias=logit_bias,
+    #             max_tokens=max_tokens,
+    #             top_p=0.1
+    #
+    #         )
+    #         time_1 = time.perf_counter()
+    #         print(f'end request, time: {time_1-time_0}')
+    #         return completion.choices[0].message.content, completion.usage.prompt_tokens, completion.usage.completion_tokens
+    #     except openai.APIError: # serverside errors
+    #         time.sleep(1.2 ** i)  # exponential increase time between failed requests, last request waits for approx. 5 seconds
+    #         print(f'\nserverside error, try again in {1.2**i} seconds')
+    # print('Servers unavailable')
 
 
 
@@ -112,6 +122,7 @@ if __name__ == "__main__":
             reader.readline()
         for line in tqdm(reader, total=total_number-args.skip_lines):
             prediction, prompt_tokens, completion_tokens = classify(line, classes, examples=examples)
+            time.sleep(1)
             with open(args.outfilepath, 'a', encoding='utf-8') as writer:
                 writer.write(f'{prediction}\n')
             if args.count_tokens:
