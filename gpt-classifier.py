@@ -1,4 +1,6 @@
 import os
+import time
+import openai
 import tiktoken
 from openai import OpenAI
 import jsonlines
@@ -60,16 +62,23 @@ def classify(text:str, classes:list[str], examples=[], model='gpt-3.5-turbo'):
     else:
         client = OpenAI(api_key=api_key)
 
-    completion = client.chat.completions.create(
-      model=model,
-      messages=messages,
-        logit_bias=logit_bias,
-        max_tokens=max_tokens,
-        top_p=0.1
+    for i in range(10):
+        try:
+            completion = client.chat.completions.create(
+              model=model,
+              messages=messages,
+                logit_bias=logit_bias,
+                max_tokens=max_tokens,
+                top_p=0.1
 
-    )
+            )
+            return completion.choices[0].message.content, completion.usage.prompt_tokens, completion.usage.completion_tokens
+        except openai.APIError: # serverside errors
+            time.sleep(1.2 ** i)  # exponential increase time between failed requests, last request waits for approx. 5 seconds
+            print(f'\nserverside error, try again in {1.2**i} seconds')
+    print('Servers unavailable')
 
-    return completion.choices[0].message.content, completion.usage.prompt_tokens, completion.usage.completion_tokens
+
 
 
 if __name__ == "__main__":
