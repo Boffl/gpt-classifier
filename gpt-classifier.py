@@ -91,6 +91,7 @@ if __name__ == "__main__":
                                                        '{"role": "assistant", "content": "some class"}')
     parser.add_argument('--count_tokens', default='', help='csv file to estimate the cost of the run')
     parser.add_argument('--number_of_tweets', help="for the progress bar")
+    parser.add_argument('--skip_lines', type=int, default=0, help="skip the first n tweets")
     args = parser.parse_args()
 
     total_number = int(args.number_of_tweets) if args.number_of_tweets else None
@@ -107,10 +108,12 @@ if __name__ == "__main__":
             classes.append(line.strip())
 
     with open(args.filepath_tweets, 'r', encoding='utf-8') as reader:
-        with open(args.outfilepath, 'w', encoding='utf-8') as writer:
-            for line in tqdm(reader, total=total_number):
-                prediction, prompt_tokens, completion_tokens = classify(line, classes, examples=examples)
-                if args.count_tokens:
-                    with open(args.count_tokens, "a", encoding='utf-8') as csvfile:
-                        csvfile.write(f'{prompt_tokens},{completion_tokens}\n')
+        for i in range(args.skip_lines): # skip the first lines if specified
+            reader.readline()
+        for line in tqdm(reader, total=total_number-args.skip_lines):
+            prediction, prompt_tokens, completion_tokens = classify(line, classes, examples=examples)
+            with open(args.outfilepath, 'a', encoding='utf-8') as writer:
                 writer.write(f'{prediction}\n')
+            if args.count_tokens:
+                with open(args.count_tokens, "a", encoding='utf-8') as csvfile:
+                    csvfile.write(f'{prompt_tokens},{completion_tokens}\n')
