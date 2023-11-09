@@ -122,7 +122,6 @@ if __name__ == "__main__":
             reader.readline()
         for line in tqdm(reader, total=total_number-args.skip_lines):
             prediction, prompt_tokens, completion_tokens = classify(line, classes, examples=examples)
-            time.sleep(1)
             with open(args.outfilepath, 'a', encoding='utf-8') as writer:
                 writer.write(f'{prediction}\n')
             if args.count_tokens:

@@ -39,9 +39,12 @@ class OpenAiModels:
         }
 
         for i in range(10):
-            time_0 = time.perf_counter()
-            response = requests.post('https://api.openai.com/v1/chat/completions', headers=self.headers, data=json.dumps(data))
-            time_1 = time.perf_counter()
+            try:
+                response = requests.post('https://api.openai.com/v1/chat/completions', headers=self.headers, data=json.dumps(data), timeout=5)
+            except requests.exceptions.Timeout:
+                print('timeout')
+                time.sleep(1.2 ** i)  # exponential increase time between failed requests, last request waits for approx. 5 seconds
+                continue
             if response.status_code == 200:
                 result = response.json()
 
