@@ -1,7 +1,12 @@
 from argparse import ArgumentParser
 
 def get_enc_labels(filepath, mapping):
-    '''turn the gpt generated classes into encoded labels'''
+    '''turn the gpt generated classes into encoded labels
+    inputs: 1) filepath to the file with GPTs generations
+            2) a dictionary with {"label_name":0, etc}
+
+    returns: a list of label encodings
+    '''
     print(mapping)
     predictions = []
     with open(filepath) as infile:
