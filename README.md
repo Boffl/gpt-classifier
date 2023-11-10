@@ -1,5 +1,23 @@
 # gpt-classifier
-example call:```python gpt-classifier.py toy_data\tweets.txt toy_data\classes.txt toy_data\predictions.txt --few_shot toy_data\examples.jso
-nl --number_of_tweets 2```<br>
-```python gpt-classifier.py raw_data\hate\test_text.txt raw_data\hate\classes.txt gpt_responses\hate.txt --count_tokens hate_zero_shot.csv --number_of_tweets 2970 --skip_lines 73
+Using GPT as a classifier and testing it on the [tweeteval](https://github.com/cardiffnlp/tweeteval) benchmark dataset.
+## classifying tweets with gpt:
+The script ```gpt-classifier.py``` calls the openAI api to classify tweets given some classes,
+it writes the responses into a file. 
+example call:
+```
+python gpt-classifier.py raw_data\hate\test_text.txt raw_data\hate\classes.txt gpt_responses\hate.txt --count_tokens hate_zero_shot.csv --number_of_tweets 2970 --skip_lines 73
+```
+
+## turning the responses into encoded labels
+To turn the responses from GPT into encoded labels (for the evaluation) use the ```encode_predictions.py```
+script. Example call:
+```
+python encode_predictions.py gpt_responses/hate.txt raw_data/hate/mappings.txt predictions/hate.txt
+```
+
+## Evaluating on the tweeteval dataset
+The file ```evaluate_script.py``` is taken from the Tweeteval repository, it returns the performance
+compared to the gold standard. Example call:
+```
+python evaluate_script.py --tweeteval_path raw_data --task hate
 ```
