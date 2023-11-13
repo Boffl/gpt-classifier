@@ -17,6 +17,13 @@ def get_enc_labels(filepath, mapping):
 
     return [mapping[pred] for pred in predictions]
 
+def get_mapping(mappingfile):
+    mapping = {}
+    with open(mappingfile, 'r', encoding='utf-8') as reader:
+        for line in reader:
+            label_enc, label_text = line.split()[0], line.split()[1].strip()
+            mapping[label_text] = label_enc
+    return mapping
 
 if __name__ == '__main__':
     parser = ArgumentParser()
@@ -25,11 +32,7 @@ if __name__ == '__main__':
     parser.add_argument('outfile')
     args = parser.parse_args()
 
-    mapping = {}
-    with open(args.mappingfile, 'r', encoding='utf-8') as reader:
-        for line in reader:
-            label_enc, label_text = line.split()[0], line.split()[1].strip()
-            mapping[label_text] = label_enc
+    mapping = get_mapping(args.mappingfile)
 
     preds = get_enc_labels(args.infile, mapping)
     with open(args.outfile, 'w', encoding='utf-8') as outfile:
