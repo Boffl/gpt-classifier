@@ -21,3 +21,7 @@ compared to the gold standard. Example call:
 ```
 python evaluate_script.py --tweeteval_path raw_data --task hate
 ```
+
+## Creating examples for the few shot setting
+In the call specify the task and number of examples (must be a multiple of the number of classes). You can define a data 
+directory, the default is 'raw_data'. It will create a file ```examples.jsonl``` with random samples from the validation set.
