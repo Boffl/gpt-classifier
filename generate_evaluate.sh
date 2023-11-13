@@ -14,6 +14,6 @@ else
    --few_shot raw_data/$task/examples.jsonl --count_tokens api_usage_log/$task\_$shots.csv --number_of_tweets $n
 fi
 
-python3.11 encode_predicions.py gpt_responses_$shots/$task.txt raw_data/$task/mappings.txt predictions_$shots/$task.txt
+python3.11 encode_predictions.py gpt_responses_$shots/$task.txt raw_data/$task/mappings.txt predictions_$shots/$task.txt
 
 
