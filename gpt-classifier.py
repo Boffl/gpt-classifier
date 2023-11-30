@@ -28,12 +28,16 @@ def make_logit_bias(inputs:list[str], model='gpt-3.5-turbo'):
     return logit_bias, max_toks
 
 
-def classify(text:str, classes:list[str], examples=[], model='gpt-3.5-turbo'):
+def classify(text:str, classes:list[str],
+             prompt="You are a helpful assistant, tasked with classifying the user input according to following classes: " ,
+             examples=[],
+             model='gpt-3.5-turbo'):
 
     '''Classify a text with GPT
     inputs: 1) text to classify
-            2) classes
-            3) examples: list of chat history, with expected behaviour of classification
+            2) what kind of prompt you want to classify
+            3) classes
+            4) examples: list of chat history, with expected behaviour of classification
                         [{"role": "user", "content": "blabla"},{"role": "assistant", "content": "some class"}]
 
     returns: the string returned by GPT. Note: it is not 100% guaranteed that it will be one of the classes'''
@@ -44,7 +48,7 @@ def classify(text:str, classes:list[str], examples=[], model='gpt-3.5-turbo'):
     # system message
     messages = [
     {"role": "system",
-     "content": f"You are a helpful assistant, tasked with classifying the user input according to following classes: {', '.join(classes)}"}]
+     "content": f"{prompt} {', '.join(classes)}"}]
 
     # append the examples (few-shot)
     for message in examples:
@@ -102,6 +106,9 @@ if __name__ == "__main__":
     parser.add_argument('--count_tokens', default='', help='csv file to estimate the cost of the run')
     parser.add_argument('--number_of_tweets', help="for the progress bar")
     parser.add_argument('--skip_lines', type=int, default=0, help="skip the first n tweets")
+    parser.add_argument('--prompt', default="You are a helpful assistant, tasked with classifying the user input "
+                                            "according to following classes: " ,  help="Prompt that is used for "
+                                                                                       "classification")
     args = parser.parse_args()
 
     total_number = int(args.number_of_tweets) if args.number_of_tweets else None
@@ -121,7 +128,7 @@ if __name__ == "__main__":
         for i in range(args.skip_lines): # skip the first lines if specified
             reader.readline()
         for line in tqdm(reader, total=total_number-args.skip_lines):
-            prediction, prompt_tokens, completion_tokens = classify(line, classes, examples=examples)
+            prediction, prompt_tokens, completion_tokens = classify(line, args.prompt,classes, examples=examples)
             with open(args.outfilepath, 'a', encoding='utf-8') as writer:
                 writer.write(f'{prediction}\n')
             if args.count_tokens:

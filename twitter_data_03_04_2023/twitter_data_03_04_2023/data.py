@@ -55,6 +55,7 @@ def write_csv(df, task):
 def main():
     df = pd.read_csv('full_year.csv')
     subsample = subsample_month(df)
+    print(get_month_dist(df))
     df_spirit, df_religion = spiritual_religious_df(subsample)
     write_csv(df_spirit, 's')
     write_csv(df_religion, 'r')

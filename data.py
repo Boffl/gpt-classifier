@@ -8,9 +8,9 @@ def reformat_mapping(data_dir):
     with open(file, newline='') as csv_file:
         mapping = csv.reader(csv_file, delimiter='\t')
         for row in mapping:
-            classes.append(row[1])
+            classes.append(row[0])
 
-    with open(f'{data_dir}/classes.txt', 'w', encoding='utf-8') as writer:
+    with open(f'{data_dir}/classes_pe.txt', 'w', encoding='utf-8') as writer:
         for cl in classes:
             writer.write(f'{cl}\n')
 
