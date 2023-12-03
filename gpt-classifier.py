@@ -9,30 +9,27 @@ from argparse import ArgumentParser
 from generate import OpenAiModels
 
 
-
-def make_logit_bias(inputs:list[str], model='gpt-3.5-turbo'):
-
+def make_logit_bias(inputs: list[ str ], model_name='gpt-3.5-turbo'):
     """
     returns:  1) a dictionary setting all the ids of the corresponding BPE tokens to 100
               2) The highest number of BPE tokens among the inputs (to set max_len when generating)
     """
     logit_bias = {}
-    encoder = tiktoken.encoding_for_model(model)
+    encoder = tiktoken.encoding_for_model(model_name)
     max_toks = 0  # the maximum number of tokens needed for writing the inputs
     for input in inputs:
         encoding = encoder.encode(input)
         max_toks = max(len(encoding), max_toks)
         for tokenid in encoding:
-            logit_bias[tokenid] = 100
+            logit_bias[ tokenid ] = 100
 
     return logit_bias, max_toks
 
 
-def classify(text:str, classes:list[str],
-             prompt="You are a helpful assistant, tasked with classifying the user input according to following classes: " ,
-             examples=[],
-             model='gpt-3.5-turbo'):
-
+def classify(text: str, classes: list[ str ],
+             prompt="You are a helpful assistant, tasked with classifying the user input according to following classes: ",
+             examples=[ ],
+             model_name='gpt-3.5-turbo'):
     '''Classify a text with GPT
     inputs: 1) text to classify
             2) what kind of prompt you want to classify
@@ -42,13 +39,13 @@ def classify(text:str, classes:list[str],
 
     returns: the string returned by GPT. Note: it is not 100% guaranteed that it will be one of the classes'''
 
-    logit_bias, max_tokens = make_logit_bias(classes)
+    logit_bias, max_tokens = make_logit_bias(classes, model_name)
 
     # setting up the messages
     # system message
     messages = [
-    {"role": "system",
-     "content": f"{prompt} {', '.join(classes)}"}]
+        {"role": "system",
+         "content": f"{prompt} {', '.join(classes)}"} ]
 
     # append the examples (few-shot)
     for message in examples:
@@ -62,7 +59,7 @@ def classify(text:str, classes:list[str],
     org_id = os.getenv('ORG_ID')
 
     # try with custom function to call the model
-    model = OpenAiModels(model, api_key, org_id)
+    model = OpenAiModels(model_name, api_key, org_id)
     # return content, prompt_tokens, completion_tokens
     return model.generate(messages, logit_bias, max_tokens)
 
@@ -93,8 +90,6 @@ def classify(text:str, classes:list[str],
     # print('Servers unavailable')
 
 
-
-
 if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument('filepath_tweets', help="txt file with each tweet on one line")
@@ -107,28 +102,30 @@ if __name__ == "__main__":
     parser.add_argument('--number_of_tweets', help="for the progress bar")
     parser.add_argument('--skip_lines', type=int, default=0, help="skip the first n tweets")
     parser.add_argument('--prompt', default="You are a helpful assistant, tasked with classifying the user input "
-                                            "according to following classes: " ,  help="Prompt that is used for "
-                                                                                       "classification")
+                                            "according to following classes: ", help="Prompt that is used for "
+                                                                                     "classification")
+    parser.add_argument('--model_name', default='gpt-3.5-turbo', help="GPT-Model")
     args = parser.parse_args()
 
     total_number = int(args.number_of_tweets) if args.number_of_tweets else None
 
-    examples = []
+    examples = [ ]
     if args.few_shot:  # add few-shot examples, if provided
         with jsonlines.open(args.few_shot) as reader:
             for line in reader:
                 examples.append(line)
 
-    classes = []
+    classes = [ ]
     with open(args.filepath_classes, 'r', encoding='utf-8') as reader:
         for line in reader:
             classes.append(line.strip())
 
     with open(args.filepath_tweets, 'r', encoding='utf-8') as reader:
-        for i in range(args.skip_lines): # skip the first lines if specified
+        for i in range(args.skip_lines):  # skip the first lines if specified
             reader.readline()
-        for line in tqdm(reader, total=total_number-args.skip_lines):
-            prediction, prompt_tokens, completion_tokens = classify(line, args.prompt,classes, examples=examples)
+        for line in tqdm(reader, total=total_number - int(args.skip_lines)):
+            prediction, prompt_tokens, completion_tokens = classify(line, classes, args.prompt,
+                                                                    model_name=args.model_name, examples=examples)
             with open(args.outfilepath, 'a', encoding='utf-8') as writer:
                 writer.write(f'{prediction}\n')
             if args.count_tokens:
