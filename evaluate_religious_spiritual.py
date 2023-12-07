@@ -53,6 +53,7 @@ def compare_spirit_religion(task):
 
 def main():
 
+
     print('HATE SUBTASK')
     compare_spirit_religion('hate')
 
@@ -62,7 +63,7 @@ def main():
     compare_spirit_religion('offensive')
     print('-' * 77)
 
-    print('EMOTION')
+    print('EMOTION SUBTASK')
     compare_spirit_religion('emotion')
     print('-' * 77)
 

@@ -1,0 +1,18 @@
+HATE SUBTASK
+ not-hate : Religious = 0.661 , Spiritual = 0.942
+ hate : Religious = 0.339 , Spiritual = 0.058
+-----------------------------------------------------------------------------
+OFFENSIVE SUBTASK
+ not-offensive : Religious = 0.649 , Spiritual = 0.942
+ offensive : Religious = 0.351 , Spiritual = 0.058
+-----------------------------------------------------------------------------
+EMOTION SUBTASK
+ anger : Religious = 0.385 , Spiritual = 0.075
+ joy : Religious = 0.097 , Spiritual = 0.259
+ optimism : Religious = 0.419 , Spiritual = 0.625
+ sadness : Religious = 0.099 , Spiritual = 0.041
+-----------------------------------------------------------------------------
+SENTIMENT SUBTASK
+ negative : Religious = 0.425 , Spiritual = 0.112
+ neutral : Religious = 0.362 , Spiritual = 0.397
+ positive : Religious = 0.214 , Spiritual = 0.491
