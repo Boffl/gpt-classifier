@@ -7,9 +7,6 @@ price_gen = 0.002
 
 cost = 0
 for filename in os.listdir(infolder):
-    if filename == 'sentiment_12_shot.csv':
-        continue
-
     filepath = os.path.join(infolder, filename)
 
     with open(filepath, 'r', encoding='utf-8') as infile:
