@@ -1,0 +1,31 @@
+HATE
+Spiritual
+Mean values: {'not-hate': 0.941343391432066, 'hate': 0.05865660856793403}
+Standard deviation values: {'not-hate': 0.003951653667081208, 'hate': 0.003951653667081199}
+Religious
+Mean values: {'hate': 0.35763114285658576, 'not-hate': 0.6423688571434142}
+Standard deviation values: {'hate': 0.018750753335867607, 'not-hate': 0.01875075333586758}
+
+EMOTION
+Spiritual
+Mean values: {'optimism': 0.6115075215764065, 'joy': 0.27905437124127985, 'anger': 0.07678425146226558, 'sadness': 0.03265385572004801}
+Standard deviation values: {'optimism': 0.012282487367891958, 'joy': 0.0145553792634859, 'anger': 0.00619930063817134, 'sadness': 0.006082925182223883}
+Religious
+Mean values: {'sadness': 0.08840381079523855, 'anger': 0.41499755853576437, 'joy': 0.09492539667399218, 'optimism': 0.4016732339950049}
+Standard deviation values: {'sadness': 0.008703558017380751, 'anger': 0.02118089891239983, 'joy': 0.0037794076096904355, 'optimism': 0.012455570495703502}
+
+SENTIMENT
+Spiritual
+Mean values: {'positive': 0.5071473438169664, 'neutral': 0.3880329541327887, 'negative': 0.104819702050245}
+Standard deviation values: {'positive': 0.01113734138847768, 'neutral': 0.01035859096799515, 'negative': 0.00956543439152467}
+Religious
+Mean values: {'negative': 0.43465538141420207, 'positive': 0.20891431479713538, 'neutral': 0.35643030378866253}
+Standard deviation values: {'negative': 0.017240298049955284, 'positive': 0.010367202142871795, 'neutral': 0.006991433412220557}
+
+OFFENSIVE
+Spiritual
+Mean values: {'not-offensive': 0.9382081034325473, 'offensive': 0.061791896567452674}
+Standard deviation values: {'not-offensive': 0.003680357329807936, 'offensive': 0.0036803573298079405}
+Religious
+Mean values: {'offensive': 0.3677900683098417, 'not-offensive': 0.6322099316901583}
+Standard deviation values: {'offensive': 0.017560673448655698, 'not-offensive': 0.017560673448655698}
