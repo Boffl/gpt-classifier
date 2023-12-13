@@ -11,7 +11,7 @@ def subsample_month(df):
     for month in set(df[ 'month' ]):
         # Subsample based on the number of entries for the current month
         month_subsample = df[ df[ 'month' ] == month ].sample(frac=0.01,
-                                                              random_state=42)  # Adjust the fraction as needed
+                                                              random_state=58)  # Adjust the fraction as needed
         overall_subsample = pd.concat([ overall_subsample, month_subsample ], ignore_index=True)
 
     return overall_subsample
@@ -42,7 +42,7 @@ def spiritual_religious_df(df):
 
 def write_csv(df, task):
 
-    file_map = {'r': 'religious_text_001.txt', 's': 'spiritual_text001.txt'}
+    file_map = {'r': 'religious_text_001_3.txt', 's': 'spiritual_text001_3".txt'}
     with open(file_map[task], 'w', encoding='utf-8') as file:
         data_list = df.values.tolist()
         for line in data_list:
