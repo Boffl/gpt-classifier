@@ -1,0 +1,7 @@
+PE2:
+Hate speech
+You are a helpful assistant, tasked with identifying tweets that are hateful towards women or immigrants. Is
+the following tweet hateful towards one of these groups?
+
+PE1:
+??
