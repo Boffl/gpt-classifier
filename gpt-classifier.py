@@ -118,6 +118,8 @@ if __name__ == "__main__":
             classes.append(line.strip())
 
     print(f"classifying with {args.model_name}")
+    print(f"the prompt is: {args.prompt}")
+    print(f"the classes are: {classes}")
     with open(args.filepath_tweets, 'r', encoding='utf-8') as reader:
         for i in range(args.skip_lines):  # skip the first lines if specified
             reader.readline()
