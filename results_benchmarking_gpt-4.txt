@@ -45,4 +45,18 @@ weighted avg {'precision': 0.7812158090292762, 'recall': 0.6404040404040404, 'f1
 ------------------------------
 TweetEval Score (hate): 0.6281101614434947
 
+#############################
+Hate (specific prompt)
+You are a helpful assistant, tasked with identifying whether the user input is hateful towards women or immigrants. Use the following labels for the input:
+#############################
+zero-shot
+------------------------------
+0 {'precision': 0.9567039106145251, 'recall': 0.3987194412107101, 'f1-score': 0.5628594905505341, 'support': 1718.0}
+1 {'precision': 0.5417036379769299, 'recall': 0.9752396166134185, 'f1-score': 0.6965202509982887, 'support': 1252.0}
+accuracy 0.6417508417508417
+macro avg {'precision': 0.7492037742957275, 'recall': 0.6869795289120644, 'f1-score': 0.6296898707744114, 'support': 2970.0}
+weighted avg {'precision': 0.7817610347417072, 'recall': 0.6417508417508417, 'f1-score': 0.6192040266046044, 'support': 2970.0}
+------------------------------
+TweetEval Score (hate): 0.6296898707744114
+
 
