@@ -26,7 +26,7 @@ class OpenAiModels:
         @:param temp, freq_pen: temperature and frequency penalty
         @:return: the text from the reply"""
 
-        if not self.model_name in ["gpt-3.5-turbo", "gpt-3.5-turbo-16k"]:
+        if not self.model_name in ["gpt-3.5-turbo", "gpt-3.5-turbo-16k", "gpt-4"]:
             print(f"{self.model_name} not implemented")
             exit(1)
 

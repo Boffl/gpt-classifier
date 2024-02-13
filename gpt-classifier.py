@@ -1,8 +1,5 @@
 import os
-import time
-import openai
 import tiktoken
-from openai import OpenAI
 import jsonlines
 from tqdm import tqdm
 from argparse import ArgumentParser
@@ -120,6 +117,7 @@ if __name__ == "__main__":
         for line in reader:
             classes.append(line.strip())
 
+    print(f"classifying with {args.model_name}")
     with open(args.filepath_tweets, 'r', encoding='utf-8') as reader:
         for i in range(args.skip_lines):  # skip the first lines if specified
             reader.readline()
