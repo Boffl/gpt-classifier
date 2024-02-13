@@ -1,8 +1,0 @@
-negative
-positive
-negative
-positive
-negative
-positive
-negative
-positive
