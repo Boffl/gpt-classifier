@@ -12,7 +12,7 @@ with the metrics used on the original task, check the [reference paper](https://
 | GPT-3.5 (zero shot)   | 74.7     | 42.6       | 72.6    | 70.8   |
 | GPT-3.5 (12 shot)   | 75.7     |  **69.9**     | 67.4    |  70.8    |
 | GPT-4 (zero shot)   |   67.2   |  64.9      | 77.0    |     | 
-| GPT-4 (12 shot)   |      |  62.8    | 69.9   |   |
+| GPT-4 (12 shot)   |   **80.5**   |  62.8    | 69.9   |   |
 | SOTA | 80.2  | 56.4   | **82.2**   |  73.7   |
 
 
