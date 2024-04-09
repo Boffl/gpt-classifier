@@ -27,9 +27,9 @@ def get_mapping(mappingfile):
 
 if __name__ == '__main__':
     parser = ArgumentParser()
-    parser.add_argument('infile')
-    parser.add_argument('mappingfile')
-    parser.add_argument('outfile')
+    parser.add_argument('infile', help="a file with the response to a tweet from GPT on each line, as created by the gpt-classifier")
+    parser.add_argument('mappingfile', help="a tsv file with the encoding and the corresponding label")
+    parser.add_argument('outfile', help="filepath where the encoded labels (predictions) should be saved")
     args = parser.parse_args()
 
     mapping = get_mapping(args.mappingfile)

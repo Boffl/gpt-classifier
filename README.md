@@ -18,8 +18,14 @@ with the metrics used on the original task, check the [reference paper](https://
 
 ## Usage of the scripts
 ### classify and evaluate
-The bash script ```generate_evaluate.sh``` calls the scripts to classify, transform GPT's responses to labels and evaluate.
+The bash script ```generate_evaluate.sh``` evokes the generation script that calls OpenAI's API, transforms the responses into labels and evaluates against the true labels.
 It expects a folder structure similar to this repo, with all necessary directories to save results. <br>
+As arguments the script takes
+- The task ('Emotion', 'Hate', 'Offensive', 'Sentiment')
+- The setting ('zero_shot' or 'few_shot)
+    - if 'few_shot' there needs to be a file ```examples.jsonl``` with examples for the few shot case
+- The number of tweets to be classified (needed for the progress bar)
+- The model name
 Example call:
 ```
 bash generate_evaluate.sh hate zero_shot 2970 gpt-4
@@ -33,7 +39,7 @@ python gpt-classifier.py raw_data\hate\test_text.txt raw_data\hate\classes.txt g
 ```
 
 ### turning the responses into encoded labels
-To turn the responses from GPT into encoded labels (for the evaluation) use the ```encode_predictions.py```
+To turn the responses from GPT into encoded labels use the ```encode_predictions.py```
 script. Example call:
 ```
 python encode_predictions.py gpt_responses_zero_shot/hate.txt raw_data/hate/mappings.txt predictions_zero_shot/hate.txt

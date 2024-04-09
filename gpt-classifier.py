@@ -91,17 +91,17 @@ if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument('filepath_tweets', help="txt file with each tweet on one line")
     parser.add_argument('filepath_classes', help="txt file with each class on one line")
-    parser.add_argument('outfilepath')
+    parser.add_argument('outfilepath', help="path to the file in which to store the model responses")
     parser.add_argument('--few_shot', default='', help='jsonl file with examples: '
                                                        '{"role": "user", "content": "blabla"}\\n'
                                                        '{"role": "assistant", "content": "some class"}')
-    parser.add_argument('--count_tokens', default='', help='csv file to estimate the cost of the run')
+    parser.add_argument('--count_tokens', default='', help='csv file to store the amount of tokens. One column for prompt tokens the second one for generated tokens.')
     parser.add_argument('--number_of_tweets', help="for the progress bar")
-    parser.add_argument('--skip_lines', type=int, default=0, help="skip the first n tweets")
+    parser.add_argument('--skip_lines', type=int, default=0, help="skip the first n tweets in the input file")
     parser.add_argument('--prompt', default="You are a helpful assistant, tasked with classifying the user input "
                                             "according to following classes: ", help="Prompt that is used for "
                                                                                      "classification")
-    parser.add_argument('--model_name', default='gpt-3.5-turbo', help="GPT-Model")
+    parser.add_argument('--model_name', default='gpt-3.5-turbo', help="GPT-Model, default: 'gpt-3.5-turbo'")
     args = parser.parse_args()
 
     total_number = int(args.number_of_tweets) if args.number_of_tweets else None

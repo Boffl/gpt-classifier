@@ -23,7 +23,7 @@ import jsonlines
 if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument('task', choices=['emotion', 'hate', 'offensive', 'sentiment'])
-    parser.add_argument('shots', type=int, help='how many shots? Has to be an even number')
+    parser.add_argument('shots', type=int, help='how many shots? Has to be an even number.')
     parser.add_argument('--data_dir', default='raw_data')
     args = parser.parse_args()
     data_dir = args.data_dir
